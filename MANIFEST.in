@@ -1,0 +1,4 @@
+include Makefile
+include COPYING
+graft pcsd
+prune pcsd/vendor/bundle
