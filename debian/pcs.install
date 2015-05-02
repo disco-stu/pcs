@@ -1,0 +1,8 @@
+etc/*
+usr/sbin/*
+usr/share/*
+usr/lib/pcsd usr/share
+usr/lib/python*/*-packages/pcs/*
+usr/lib/python*/*-packages/pcs-*.egg-info
+var/lib/pcsd
+var/log/pcsd

@@ -1,0 +1,49 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#DH_VERBOSE = 1
+
+# see FEATURE AREAS in dpkg-buildflags(1)
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+# Ensure that we link against all needed libraries (cf. Policy 10.2)
+export DEB_LDFLAGS_MAINT_APPEND=-Wl,-z,defs
+
+# main packaging script based on dh7 syntax
+%:
+	dh $@ --with python2 --fail-missing
+
+override_dh_clean:
+	dh_clean --keep --exclude="corosync.conf.orig"
+
+override_dh_auto_build:
+	echo "Bundler decoupled from build system"
+
+override_dh_auto_install:
+	mkdir -p $(CURDIR)/debian/tmp
+# Make pcs
+	$(MAKE) install \
+		PREFIX=/usr \
+		DESTDIR=$(CURDIR)/debian/tmp \
+		PYTHON_SITELIB=/usr/lib/python2.7/dist-packages
+# Make pcsd
+	$(MAKE) install_pcsd \
+		PREFIX=/usr \
+		DESTDIR=$(CURDIR)/debian/tmp \
+		PYTHON_SITELIB=/usr/lib/python2.7/dist-packages
+# Exclude .gitignore file
+	rm -v $(CURDIR)/debian/tmp/usr/lib/pcsd/.gitignore
+# Add the readme
+	mkdir -p $(CURDIR)/debian/tmp/usr/share/doc/pcs/
+	cp $(CURDIR)/README $(CURDIR)/debian/tmp/usr/share/doc/pcs/README
+	
+override_dh_installinit:
+	dh_installinit --onlyscripts --name=pcsd --
+	
+override_dh_compress:
+# make non-scripts non-executable
+	chmod -x $(CURDIR)/debian/pcs/usr/share/pcsd/public/css/*
+	chmod -x $(CURDIR)/debian/pcs/etc/pam.d/pcsd
+	chmod -x $(CURDIR)/debian/pcs/etc/bash_completion.d/pcs
+	chmod 755 $(CURDIR)/debian/pcs/usr/share/pcsd/public/css/images/
+	dh_compress

@@ -1,0 +1,25 @@
+From: Richard B Winters <rik@mmogp.com>
+Date: Sat, 2 May 2015 01:19:24 -0400
+Subject: Remove build_gems from install_pcsd
+
+ - Decouple the rubygem bundler from pcs/pcsd as Build-Depends 
+   and Depends handle dependencies on Debian
+
+Change-Id: I323b94d277975737fe083a1fcea17fb503589b58
+Signed-off-by: Richard B Winters <rik@mmogp.com>
+---
+ Makefile | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index c37373b..0bc1767 100644
+--- a/Makefile
++++ b/Makefile
+@@ -36,7 +36,6 @@ install: bash_completion
+ 	install -m644 -D pcs/pcs.8 ${DESTDIR}/${MANDIR}/man8/pcs.8
+ 
+ install_pcsd:
+-	make -C pcsd build_gems
+ 	mkdir -p ${DESTDIR}/var/log/pcsd
+ 	mkdir -p ${DESTDIR}${PREFIX}/lib/
+ 	cp -r pcsd ${DESTDIR}${PREFIX}/lib/

@@ -1,0 +1,29 @@
+From: Richard B Winters <rik@mmogp.com>
+Date: Sat, 2 May 2015 03:45:28 -0400
+Subject: Source lsb init functions
+
+ - The /etc/init.d script does not source 
+   /lib/lsb/init-functions. The systemd package provides 
+   /lib/lsb/init-functions.d/40-systemd to redirect 
+   /etc/init.d/$script calls to systemctl.
+
+Change-Id: I2b3e292d5453f21c4a879011faf8a4e2ff11b99d
+Signed-off-by: Richard B Winters <rik@mmogp.com>
+---
+ pcsd/pcsd | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/pcsd/pcsd b/pcsd/pcsd
+index b47472a..29bacc3 100755
+--- a/pcsd/pcsd
++++ b/pcsd/pcsd
+@@ -20,6 +20,9 @@
+ # Source function library.
+ . /etc/rc.d/init.d/functions
+ 
++# Source lsb init functions
++. /lib/lsb/init-functions
++
+ exec="/usr/bin/ruby"
+ prog="pcsd"
+ config="/var/lib/pcsd"

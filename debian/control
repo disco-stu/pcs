@@ -1,0 +1,66 @@
+Source: pcs
+Section: admin
+Priority: extra
+Maintainer: Debian HA Maintainers <debian-ha-maintainers@lists.alioth.debian.org>
+Uploaders: Richard B Winters <rik@mmogp.com>
+Build-Depends: debhelper (>= 9.0.0),
+ dh-python,
+ dh-systemd,
+ libpam0g-dev,
+ python-all (>= 2.6.6-3~),
+ ruby,
+ ruby2.1-dev,
+ ruby-backports,
+ ruby-eventmachine,
+ ruby-highline,
+ ruby-json,
+ ruby-monkey-lib,
+ ruby-multi-json,
+ ruby-net-http-persistent,
+ ruby-open4,
+ ruby-rack,
+ ruby-rack-protection,
+ ruby-rack-test,
+ ruby-rpam-ruby19,
+ ruby-sinatra,
+ ruby-thor,
+ ruby-tilt,
+ rubygems-integration
+Standards-Version: 3.9.6
+Homepage: https://github.com/feist/pcs
+Vcs-Git: https://alioth.debian.org/anonscm/git/debian-ha/pcs.git
+Vcs-Browser: http://anonscm.debian.org/cgit/debian-ha/pcs.git
+
+Package: pcs
+Architecture: all
+Depends: ${shlibs:Depends},
+ ${python:Depends},
+ ${misc:Depends},
+ python2.7 (>=2.7.9),
+ dh-python,
+ dh-systemd,
+ ruby,
+ ruby-backports,
+ ruby-eventmachine,
+ ruby-highline,
+ ruby-json,
+ ruby-monkey-lib,
+ ruby-multi-json,
+ ruby-open4,
+ ruby-rack,
+ ruby-rack-protection,
+ ruby-rack-test,
+ ruby-rpam-ruby19,
+ ruby-sinatra,
+ ruby-tilt,
+ rubygems-integration
+Recommends: pacemaker (>= 1.1.12)
+Replaces: pacemaker (<< 1.1.12)
+Breaks: pacemaker (<< 1.1.12)
+Description: Pacemaker Configuration System
+ pcs is a corosync and pacemaker configuration tool.  It permits 
+ users to easily view, modify and create pacemaker based clusters.
+ .
+ pcs also provides pcsd, which operates as a GUI and remote server
+ for pcs. Together pcs and pcsd form the recommended configuration
+ tool for use with pacemaker.
