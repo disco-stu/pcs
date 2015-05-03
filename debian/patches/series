@@ -4,3 +4,4 @@
 0004-Source-lsb-init-functions.patch
 0005-Remove-rc.d-source-functions-in-pcsd-init-file.patch
 0006-Fix-pcsd-location-and-args-in-init-script.patch
+0007-Fix-pcsd.conf-destination-in-pcsd-makefile.patch
