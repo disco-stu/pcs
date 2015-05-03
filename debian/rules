@@ -36,6 +36,10 @@ override_dh_auto_install:
 # Add the readme
 	mkdir -p $(CURDIR)/debian/tmp/usr/share/doc/pcs/
 	cp $(CURDIR)/README $(CURDIR)/debian/tmp/usr/share/doc/pcs/README
+
+override_dh_python2:
+	dh_python2 -p pcs --skip-private
+	dh_python2 -p pcs /usr/share/pcsd
 	
 override_dh_installinit:
 	dh_installinit --onlyscripts --name=pcsd --
