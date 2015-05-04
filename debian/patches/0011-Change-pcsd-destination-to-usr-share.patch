@@ -1,0 +1,29 @@
+From: Richard B Winters <rik@mmogp.com>
+Date: Sun, 3 May 2015 21:00:20 -0400
+Subject: Change pcsd destination to usr share
+
+ - By default pcsd/Makefile installs pcsd to usr/lib/pcsd, but 
+   lintian wants those arch indep files to live in usr/share, 
+   thus the patch was born.
+
+Change-Id: Iffb2e1bc8f1119dbc3181c1ffedd70fc57276a5f
+Signed-off-by: Richard B Winters <rik@mmogp.com>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f67a9b8..5768e62 100644
+--- a/Makefile
++++ b/Makefile
+@@ -37,8 +37,8 @@ install: bash_completion
+ 
+ install_pcsd:
+ 	mkdir -p ${DESTDIR}/var/log/pcsd
+-	mkdir -p ${DESTDIR}${PREFIX}/lib/
+-	cp -r pcsd ${DESTDIR}${PREFIX}/lib/
++	mkdir -p ${DESTDIR}${PREFIX}/share/
++	cp -r pcsd ${DESTDIR}${PREFIX}/share/
+ 	install -m 644 -D pcsd/pcsd.conf ${DESTDIR}/etc/init/pcsd.conf
+ 	install -d ${DESTDIR}/etc/pam.d
+ 	install  pcsd/pcsd.pam ${DESTDIR}/etc/pam.d/pcsd
