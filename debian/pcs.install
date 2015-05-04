@@ -1,4 +1,5 @@
 etc/*
+lib/systemd/system/*
 usr/sbin/*
 usr/share/*
 usr/share/pcsd/*
