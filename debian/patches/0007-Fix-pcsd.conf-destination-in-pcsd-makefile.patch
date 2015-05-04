@@ -20,7 +20,7 @@ index 0bc1767..6cf519b 100644
  	mkdir -p ${DESTDIR}${PREFIX}/lib/
  	cp -r pcsd ${DESTDIR}${PREFIX}/lib/
 -	install -m 644 -D pcsd/pcsd.conf ${DESTDIR}/etc/sysconfig/pcsd
-+	install -m 644 -D pcsd/pcsd.conf ${DESTDIR}/etc/init/pcsd.conf
++	install -m 644 -D pcsd/pcsd.conf ${DESTDIR}/etc/default/pcsd.conf
  	install -d ${DESTDIR}/etc/pam.d
  	install  pcsd/pcsd.pam ${DESTDIR}/etc/pam.d/pcsd
  	install -m 700 -d ${DESTDIR}/var/lib/pcsd
