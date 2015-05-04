@@ -1,0 +1,47 @@
+From: Richard B Winters <rik@mmogp.com>
+Date: Sun, 3 May 2015 21:57:53 -0400
+Subject: Fix check for systemctl on Debian
+
+ - On debian systemctl is not usually in /usr/bin, but rather 
+   in /bin. Well test for systemd using a different means.
+ - If systemd is detected, we'll still put the init script 
+   into the proper installation directory, we just won't 
+   register it with update-rc.d
+
+Change-Id: I3db2cc133bbe8401fc7c43ccc0bd9735b79a3788
+Signed-off-by: Richard B Winters <rik@mmogp.com>
+---
+ Makefile | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 5768e62..0e1a7ec 100644
+--- a/Makefile
++++ b/Makefile
+@@ -8,14 +8,7 @@ ifeq ($(PYTHON_SITELIB), /usr/lib/python2.7/dist-packages)
+   EXTRA_SETUP_OPTS="--install-layout=deb"
+ endif
+ 
+-IS_SYSTEMCTL=false
+-ifeq ("$(wildcard /usr/bin/systemctl)","/usr/bin/systemctl")
+-  IS_SYSTEMCTL=true
+-else
+-  ifeq ("$(wildcard /bin/systemctl)","/usr/bin/systemctl")
+-    IS_SYSTEMCTL=true
+-  endif
+-endif
++IS_SYSTEMCTL = $(shell if ps -p 1 -o comm= | grep -q -i "systemd" ; then echo true; else echo false; fi)
+ 
+ MANDIR=/usr/share/man
+ 
+@@ -47,9 +40,8 @@ install_pcsd:
+ ifeq ($(IS_SYSTEMCTL),true)
+ 	install -d ${DESTDIR}/lib/systemd/system
+ 	install -m 644 pcsd/pcsd.service ${DESTDIR}/lib/systemd/system/
+-else
+-	install -m 755 -D pcsd/pcsd ${DESTDIR}/${initdir}/pcsd
+ endif
++	install -m 755 -D pcsd/pcsd ${DESTDIR}/${initdir}/pcsd
+ 
+ uninstall:
+ 	rm -f ${DESTDIR}${PREFIX}/sbin/pcs

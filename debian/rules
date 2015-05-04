@@ -42,7 +42,7 @@ override_dh_python2:
 	dh_python2 -p pcs /usr/share/pcsd
 	
 override_dh_installinit:
-	dh_installinit --onlyscripts --name=pcsd --
+	dh_installinit -n --name=pcsd --
 	
 override_dh_compress:
 # make non-scripts non-executable
