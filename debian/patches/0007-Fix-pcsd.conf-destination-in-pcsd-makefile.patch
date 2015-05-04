@@ -11,9 +11,11 @@ Signed-off-by: Richard B Winters <rik@mmogp.com>
  Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/Makefile b/Makefile
+index 0bc1767..1e0c00b 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -39,7 +39,7 @@
+@@ -39,7 +39,7 @@ install_pcsd:
  	mkdir -p ${DESTDIR}/var/log/pcsd
  	mkdir -p ${DESTDIR}${PREFIX}/lib/
  	cp -r pcsd ${DESTDIR}${PREFIX}/lib/

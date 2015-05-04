@@ -8,3 +8,5 @@
 0008-Fix-conf-directory-in-pcsd-init.patch
 0009-Fix-file-locations-in-pcsd.service.patch
 0010-Fix-pcsd.service-destination-in-Makefile.patch
+0011-Change-pcsd-destination-to-usr-share.patch
+0012-Fix-check-for-systemctl-on-Debian.patch

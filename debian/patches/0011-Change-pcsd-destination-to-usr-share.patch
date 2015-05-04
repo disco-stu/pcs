@@ -1,0 +1,38 @@
+From: Richard B Winters <rik@mmogp.com>
+Date: Mon, 4 May 2015 00:00:44 -0400
+Subject: Change pcsd destination to usr share
+
+ - By default pcsd/Makefile installs pcsd to usr/lib/pcsd, but 
+   lintian wants those arch indep files to live in usr/share, 
+   thus the patch was born.
+
+Change-Id: I592ebe46b721389fbda4634c2a6f5354fa5f2e39
+Signed-off-by: Richard B Winters <rik@mmogp.com>
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index da27d98..f318313 100644
+--- a/Makefile
++++ b/Makefile
+@@ -37,8 +37,8 @@ install: bash_completion
+ 
+ install_pcsd:
+ 	mkdir -p ${DESTDIR}/var/log/pcsd
+-	mkdir -p ${DESTDIR}${PREFIX}/lib/
+-	cp -r pcsd ${DESTDIR}${PREFIX}/lib/
++	mkdir -p ${DESTDIR}${PREFIX}/share/
++	cp -r pcsd ${DESTDIR}${PREFIX}/share/
+ 	install -m 644 -D pcsd/pcsd.conf ${DESTDIR}/etc/default/pcsd.conf
+ 	install -d ${DESTDIR}/etc/pam.d
+ 	install  pcsd/pcsd.pam ${DESTDIR}/etc/pam.d/pcsd
+@@ -54,7 +54,7 @@ endif
+ uninstall:
+ 	rm -f ${DESTDIR}${PREFIX}/sbin/pcs
+ 	rm -rf ${DESTDIR}${PYTHON_SITELIB}/pcs
+-	rm -rf ${DESTDIR}${PREFIX}/lib/pcsd
++	rm -rf ${DESTDIR}${PREFIX}/share/pcsd
+ ifeq ($(IS_SYSTEMCTL),true)
+ 	rm -f ${DESTDIR}/lib/systemd/system/pcsd.service
+ else

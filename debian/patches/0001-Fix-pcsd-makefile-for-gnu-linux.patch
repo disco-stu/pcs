@@ -12,6 +12,8 @@ Signed-off-by: Richard B Winters <rik@mmogp.com>
  pcsd/Makefile | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/pcsd/Makefile b/pcsd/Makefile
+index 325f54a..8779671 100644
 --- a/pcsd/Makefile
 +++ b/pcsd/Makefile
 @@ -1,9 +1,9 @@

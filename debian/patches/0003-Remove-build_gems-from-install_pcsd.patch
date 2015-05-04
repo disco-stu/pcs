@@ -11,9 +11,11 @@ Signed-off-by: Richard B Winters <rik@mmogp.com>
  Makefile | 1 -
  1 file changed, 1 deletion(-)
 
+diff --git a/Makefile b/Makefile
+index c37373b..0bc1767 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -36,7 +36,6 @@
+@@ -36,7 +36,6 @@ install: bash_completion
  	install -m644 -D pcs/pcs.8 ${DESTDIR}/${MANDIR}/man8/pcs.8
  
  install_pcsd:
