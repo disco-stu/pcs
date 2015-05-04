@@ -11,7 +11,7 @@ export DEB_LDFLAGS_MAINT_APPEND=-Wl,-z,defs
 
 # main packaging script based on dh7 syntax
 %:
-	dh $@ --with python2 --fail-missing
+	dh $@ --with python2,systemd --fail-missing
 
 override_dh_clean:
 	dh_clean --keep --exclude="corosync.conf.orig"
@@ -40,10 +40,15 @@ override_dh_auto_install:
 override_dh_python2:
 	dh_python2 -p pcs --skip-private
 	dh_python2 -p pcs /usr/share/pcsd
-	
+
+INSTALLINIT_COMMAND = $(shell \
+	if ps -p 1 -o comm= | grep -q -i "systemd" ; \
+	then echo "dh_installinit -n --name=pcsd --"; \
+	else echo "dh_installinit --onlyscripts --name=pcsd --"; fi)
+
 override_dh_installinit:
-	dh_installinit -n --name=pcsd --
-	
+	$(INSTALLINIT_COMMAND)
+
 override_dh_compress:
 # make non-scripts non-executable
 	chmod -x $(CURDIR)/debian/pcs/usr/share/pcsd/public/css/*
