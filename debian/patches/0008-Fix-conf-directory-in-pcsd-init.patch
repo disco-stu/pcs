@@ -11,8 +11,6 @@ Signed-off-by: Richard B Winters <rik@mmogp.com>
  pcsd/pcsd | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/pcsd/pcsd b/pcsd/pcsd
-index 226447a..64a35da 100755
 --- a/pcsd/pcsd
 +++ b/pcsd/pcsd
 @@ -25,9 +25,10 @@
@@ -27,7 +25,7 @@ index 226447a..64a35da 100755
  
  lockfile=/var/lock/subsys/$prog
  
-@@ -36,7 +37,7 @@ start() {
+@@ -36,7 +37,7 @@
      echo -n $"Starting $prog: "
      #export GEM_HOME=/usr/lib/pcsd/vendor/bundle/ruby
      cd /var/lib/pcsd

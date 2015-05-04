@@ -13,8 +13,6 @@ Signed-off-by: Richard B Winters <rik@mmogp.com>
  pcsd/pcsd | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/pcsd/pcsd b/pcsd/pcsd
-index b47472a..29bacc3 100755
 --- a/pcsd/pcsd
 +++ b/pcsd/pcsd
 @@ -20,6 +20,9 @@

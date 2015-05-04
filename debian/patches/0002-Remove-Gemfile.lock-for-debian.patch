@@ -12,9 +12,6 @@ Signed-off-by: Richard B Winters <rik@mmogp.com>
  1 file changed, 50 deletions(-)
  delete mode 100644 pcsd/Gemfile.lock
 
-diff --git a/pcsd/Gemfile.lock b/pcsd/Gemfile.lock
-deleted file mode 100644
-index 06db6d6..0000000
 --- a/pcsd/Gemfile.lock
 +++ /dev/null
 @@ -1,50 +0,0 @@

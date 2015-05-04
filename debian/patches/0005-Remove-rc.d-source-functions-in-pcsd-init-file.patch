@@ -10,8 +10,6 @@ Signed-off-by: Richard B Winters <rik@mmogp.com>
  pcsd/pcsd | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/pcsd/pcsd b/pcsd/pcsd
-index 29bacc3..b2c385d 100755
 --- a/pcsd/pcsd
 +++ b/pcsd/pcsd
 @@ -18,7 +18,7 @@

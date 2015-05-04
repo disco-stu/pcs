@@ -10,8 +10,6 @@ Signed-off-by: Richard B Winters <rik@mmogp.com>
  pcsd/pcsd | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/pcsd/pcsd b/pcsd/pcsd
-index b2c385d..226447a 100755
 --- a/pcsd/pcsd
 +++ b/pcsd/pcsd
 @@ -7,8 +7,8 @@
@@ -34,7 +32,7 @@ index b2c385d..226447a 100755
  
  [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
  
-@@ -34,9 +34,9 @@ lockfile=/var/lock/subsys/$prog
+@@ -34,9 +34,9 @@
  start() {
      [ -x $exec ] || exit 5
      echo -n $"Starting $prog: "

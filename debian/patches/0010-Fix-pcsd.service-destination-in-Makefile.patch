@@ -11,11 +11,9 @@ Signed-off-by: Richard B Winters <rik@mmogp.com>
  Makefile | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 6cf519b..f67a9b8 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -45,8 +45,8 @@ install_pcsd:
+@@ -45,8 +45,8 @@
  	install -m 700 -d ${DESTDIR}/var/lib/pcsd
  	install -m 644 -D pcsd/pcsd.logrotate ${DESTDIR}/etc/logrotate.d/pcsd
  ifeq ($(IS_SYSTEMCTL),true)
