@@ -1,0 +1,22 @@
+From: Richard B Winters <rik@mmogp.com>
+Date: Tue, 5 May 2015 17:24:12 -0400
+Subject: Remove rubygems require pcsd ssl.rb
+
+ - Remove the require on rubygems from /usr/share/pcsd/ssl.rb 
+   as dependencies are handled via debian
+
+Change-Id: I62077a4ced5f74f0019104757767d0431bac8559
+Signed-off-by: Richard B Winters <rik@mmogp.com>
+---
+ pcsd/ssl.rb | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/pcsd/ssl.rb b/pcsd/ssl.rb
+index 1001755..6535b88 100644
+--- a/pcsd/ssl.rb
++++ b/pcsd/ssl.rb
+@@ -1,4 +1,3 @@
+-require 'rubygems'
+ require 'webrick'
+ require 'webrick/https'
+ require 'openssl'
