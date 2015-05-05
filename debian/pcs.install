@@ -1,4 +1,7 @@
-etc/*
+etc/bash_completion.d/*
+etc/default/*
+etc/logrotate.d/*
+etc/pam.d/*
 lib/systemd/system/*
 usr/sbin/*
 usr/share/*

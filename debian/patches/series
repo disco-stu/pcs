@@ -1,12 +1,8 @@
 0001-Fix-pcsd-makefile-for-gnu-linux.patch
 0002-Remove-Gemfile.lock-for-debian.patch
 0003-Remove-build_gems-from-install_pcsd.patch
-0004-Source-lsb-init-functions.patch
-0005-Remove-rc.d-source-functions-in-pcsd-init-file.patch
-0006-Fix-pcsd-location-and-args-in-init-script.patch
-0007-Fix-pcsd.conf-destination-in-pcsd-makefile.patch
-0008-Fix-conf-directory-in-pcsd-init.patch
-0009-Fix-file-locations-in-pcsd.service.patch
-0010-Fix-pcsd.service-destination-in-Makefile.patch
-0011-Change-pcsd-destination-to-usr-share.patch
-0012-Fix-check-for-systemctl-on-Debian.patch
+0004-Fix-pcsd.conf-destination-in-pcsd-makefile.patch
+0005-Fix-file-locations-in-pcsd.service.patch
+0006-Fix-pcsd.service-destination-in-Makefile.patch
+0007-Change-pcsd-destination-to-usr-share.patch
+0008-Fix-check-for-systemctl-on-Debian.patch
