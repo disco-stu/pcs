@@ -26,6 +26,7 @@ EXEC=ruby
 SUB_EXEC=/usr/share/pcsd/ssl.rb
 DAEMON=/usr/bin/ruby
 DAEMON_ARGS="-I/usr/share/pcsd /usr/share/pcsd/ssl.rb"
+RUN_DIR=/var/lib/pcsd
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
@@ -41,14 +42,13 @@ SCRIPTNAME=/etc/init.d/$NAME
 
 do_start() 
 {
-    cd /var/lib/pcsd
     # Return
     # 0 if daemon has been started
     # 1 if daemon was already running
     # 2 if daemon could not be started
-    start-stop-daemon --start --quiet --test --exec $DAEMON -- test \
+    start-stop-daemon --start --quiet --chdir $RUN_DIR --test --exec $DAEMON -- test \
       ||  return 1
-    start-stop-daemon --start --quiet --exec $DAEMON -- $DAEMON_ARGS \
+    start-stop-daemon --start --quiet --chdir $RUN_DIR --exec $DAEMON -- $DAEMON_ARGS \
       || return 2
     # Add code here, if necessary, that waits for the process to be ready
     # to handle requests from services started subsequently which depend
