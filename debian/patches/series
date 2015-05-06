@@ -2,9 +2,8 @@
 0002-Remove-Gemfile.lock-for-debian.patch
 0003-Remove-build_gems-from-install_pcsd.patch
 0004-Fix-pcsd.conf-destination-in-pcsd-makefile.patch
-0005-Fix-file-locations-in-pcsd.service.patch
-0006-Fix-pcsd.service-destination-in-Makefile.patch
-0007-Change-pcsd-destination-to-usr-share.patch
-0008-Fix-check-for-systemctl-on-Debian.patch
-0009-Do-not-install-upstream-pcsd-init-script.patch
-0010-Remove-rubygems-require-pcsd-ssl.rb.patch
+0005-Fix-pcsd.service-destination-in-Makefile.patch
+0006-Change-pcsd-destination-to-usr-share.patch
+0007-Fix-check-for-systemctl-on-Debian.patch
+0008-Do-not-install-upstream-pcsd-init-script.patch
+0009-Remove-rubygems-require-pcsd-ssl.rb.patch
