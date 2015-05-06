@@ -6,4 +6,5 @@
 0006-Change-pcsd-destination-to-usr-share.patch
 0007-Fix-check-for-systemctl-on-Debian.patch
 0008-Do-not-install-upstream-pcsd-init-script.patch
-0009-Remove-rubygems-require-pcsd-ssl.rb.patch
+0009-Fix-pcsd-service-file-for-Debian.patch
+0010-Remove-rubygems-require-pcsd-ssl.rb.patch
