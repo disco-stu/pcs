@@ -20,7 +20,6 @@
 # PATH
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 DESC="pcs daemon"
-PARENT_NAME=pcs
 NAME=pcsd
 EXEC=ruby
 SUB_EXEC=/usr/share/pcsd/ssl.rb
@@ -37,7 +36,7 @@ SLEEP_DURATION=2
 [ -x $(which $SUB_EXEC) ] || echo "$SUB_EXEC not found. Is pcs installed?"
 
 # Read configuration variable file if it is present
-[ -r /etc/default/$NAME.conf ] && . /etc/default/$NAME.conf
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
 
 # Source lsb init functions
 . /lib/lsb/init-functions
