@@ -1,10 +1,1 @@
-0001-Fix-pcsd-makefile-for-gnu-linux.patch
-0002-Remove-Gemfile.lock-for-debian.patch
-0003-Remove-build_gems-from-install_pcsd.patch
-0004-Fix-pcsd.conf-destination-in-pcsd-makefile.patch
-0005-Fix-pcsd.service-destination-in-Makefile.patch
-0006-Change-pcsd-destination-to-usr-share.patch
-0007-Fix-check-for-systemctl-on-Debian.patch
-0008-Do-not-install-upstream-pcsd-init-script.patch
-0009-Fix-pcsd-service-file-for-Debian.patch
-0010-Remove-rubygems-require-pcsd-ssl.rb.patch
+
