@@ -1,1 +1,5 @@
-
+0001-Streamline-upstream-for-compatibility-with-Debian.patch
+0002-Fix-pcsd-makefile-for-gnu-linux.patch
+0003-Remove-Gemlock.file-on-Debian.patch
+0004-Remove-require-on-rubygems-in-pcsd-ssl.rb.patch
+0005-Remove-pcsd-.gitignore-file.patch

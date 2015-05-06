@@ -1,0 +1,323 @@
+From: Richard B Winters <rik@mmogp.com>
+Date: Wed, 6 May 2015 01:27:17 -0400
+Subject: Streamline upstream for compatibility with Debian
+
+ - Updated the root Makefile to include checks for Debian and 
+   modify the installation appropriately.
+ - The set of changes should allow for a proper 'from source' 
+   installation when downloaded and lacks any Debian 
+   packaging modifications, meant for a pull request to be 
+   sent upstream
+   
+Summary of Changes for Debian:
+ - Arch indep files in /usr/share
+ - Sysconfig is /etc/default
+ - system-auth is /etc/pam.d/common-*; Debian specific pam.d 
+   configuration, pcsd.pam.debian, is added
+ - Debian specific systemd file, pcsd.service.debian, is added
+ - Debian specific init; pcsd.debian is added
+ - Variables are introduced which discretely eases packaging 
+   for systemd; BUILD_GEMS and systemddir
+
+Change-Id: Ie06f5ed5232fbf00881f7c4a45c00a7822645d4c
+Signed-off-by: Richard B Winters <rik@mmogp.com>
+---
+ Makefile                 |  68 +++++++++++++++++++----
+ pcsd/pcsd.debian         | 141 +++++++++++++++++++++++++++++++++++++++++++++++
+ pcsd/pcsd.pam.debian     |   5 ++
+ pcsd/pcsd.service.debian |   9 +++
+ 4 files changed, 213 insertions(+), 10 deletions(-)
+ create mode 100755 pcsd/pcsd.debian
+ create mode 100644 pcsd/pcsd.pam.debian
+ create mode 100644 pcsd/pcsd.service.debian
+
+diff --git a/Makefile b/Makefile
+index c37373b..db794f1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,3 +1,16 @@
++# Compatibility with GNU/Linux [i.e. Debian] based distros
++UNAME_OS_GNU := $(shell if uname -o | grep -q "GNU/Linux" ; then echo true; else echo false; fi)
++UNAME_KERNEL_DEBIAN := $(shell if uname -v | grep -q "Debian" ; then echo true; else echo false; fi)
++IS_DEBIAN=false
++UNAME_DEBIAN_VER_8=false
++
++ifeq ($(UNAME_OS_GNU),true)
++  ifeq ($(UNAME_KERNEL_DEBIAN),true)
++    IS_DEBIAN=true
++    UNAME_DEBIAN_VER_8 := $(shell if grep -q -i "8" /etc/debian_version ; then echo true; else echo false; fi)
++  endif
++endif
++
+ ifndef PYTHON_SITELIB
+   PYTHON_SITELIB=$(shell python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+ endif
+@@ -8,21 +21,36 @@ ifeq ($(PYTHON_SITELIB), /usr/lib/python2.7/dist-packages)
+   EXTRA_SETUP_OPTS="--install-layout=deb"
+ endif
+ 
++# Check for systemd presence, add compatibility with Debian based distros
+ IS_SYSTEMCTL=false
+-ifeq ("$(wildcard /usr/bin/systemctl)","/usr/bin/systemctl")
+-  IS_SYSTEMCTL=true
++
++ifeq ($(IS_DEBIAN),true)
++  IS_SYSTEMCTL = $(shell if ps -p 1 -o comm= | grep -q -i "systemd" ; then echo true; else echo false; fi)
+ else
+-  ifeq ("$(wildcard /bin/systemctl)","/usr/bin/systemctl")
++  ifeq ("$(wildcard /usr/bin/systemctl)","/usr/bin/systemctl")
+     IS_SYSTEMCTL=true
++  else
++    ifeq ("$(wildcard /bin/systemctl)","/usr/bin/systemctl")
++      IS_SYSTEMCTL=true
++    endif
+   endif
+ endif
+ 
++# Check for an override for building gems
++ifndef BUILD_GEMS
++  BUILD_GEMS=true
++endif
++
+ MANDIR=/usr/share/man
+ 
+ ifndef PREFIX
+   PREFIX=$(shell prefix=`python -c "import sys; print(sys.prefix)"` || prefix="/usr"; echo $$prefix)
+ endif
+ 
++ifndef systemddir
++  systemddir=/usr/lib/systemd
++endif
++
+ ifndef initdir
+   initdir=/etc/init.d
+ endif
+@@ -36,28 +64,48 @@ install: bash_completion
+ 	install -m644 -D pcs/pcs.8 ${DESTDIR}/${MANDIR}/man8/pcs.8
+ 
+ install_pcsd:
++ifeq ($(BUILD_GEMS),true)
+ 	make -C pcsd build_gems
++endif
+ 	mkdir -p ${DESTDIR}/var/log/pcsd
++ifeq ($(IS_DEBIAN),true)
++	mkdir -p ${DESTDIR}/usr/share/
++	cp -r pcsd ${DESTDIR}/usr/share/
++	install -m 644 -D pcsd/pcsd.conf ${DESTDIR}/etc/default/pcsd
++	install -d ${DESTDIR}/etc/pam.d
++	install  pcsd/pcsd.pam.debian ${DESTDIR}/etc/pam.d/pcsd
++  ifeq ($(IS_SYSTEMCTL),true)
++	install -d ${DESTDIR}/${systemddir}/system/
++	install -m 644 pcsd/pcsd.service.debian ${DESTDIR}/${systemddir}/system/pcsd.service
++  else
++	install -m 755 -D pcsd/pcsd.debian ${DESTDIR}/${initdir}/pcsd
++  endif
++else
+ 	mkdir -p ${DESTDIR}${PREFIX}/lib/
+ 	cp -r pcsd ${DESTDIR}${PREFIX}/lib/
+ 	install -m 644 -D pcsd/pcsd.conf ${DESTDIR}/etc/sysconfig/pcsd
+ 	install -d ${DESTDIR}/etc/pam.d
+ 	install  pcsd/pcsd.pam ${DESTDIR}/etc/pam.d/pcsd
+-	install -m 700 -d ${DESTDIR}/var/lib/pcsd
+-	install -m 644 -D pcsd/pcsd.logrotate ${DESTDIR}/etc/logrotate.d/pcsd
+-ifeq ($(IS_SYSTEMCTL),true)
+-	install -d ${DESTDIR}/usr/lib/systemd/system/
+-	install -m 644 pcsd/pcsd.service ${DESTDIR}/usr/lib/systemd/system/
+-else
++  ifeq ($(IS_SYSTEMCTL),true)
++	install -d ${DESTDIR}/${systemddir}/system/
++	install -m 644 pcsd/pcsd.service ${DESTDIR}/${systemddir}/system/
++  else
+ 	install -m 755 -D pcsd/pcsd ${DESTDIR}/${initdir}/pcsd
++  endif
+ endif
++	install -m 700 -d ${DESTDIR}/var/lib/pcsd
++	install -m 644 -D pcsd/pcsd.logrotate ${DESTDIR}/etc/logrotate.d/pcsd
+ 
+ uninstall:
+ 	rm -f ${DESTDIR}${PREFIX}/sbin/pcs
+ 	rm -rf ${DESTDIR}${PYTHON_SITELIB}/pcs
++ifeq ($(IS_DEBIAN),true)
++	rm -rf ${DESTDIR}/usr/share/pcsd
++else
+ 	rm -rf ${DESTDIR}${PREFIX}/lib/pcsd
++endif
+ ifeq ($(IS_SYSTEMCTL),true)
+-	rm -f ${DESTDIR}/usr/lib/systemd/system/pcsd.service
++	rm -f ${DESDIR}/${systemddir}/system/pcsd.service
+ else
+ 	rm -f ${DESTDIR}/${initdir}/pcsd
+ endif
+diff --git a/pcsd/pcsd.debian b/pcsd/pcsd.debian
+new file mode 100755
+index 0000000..1d63ea5
+--- /dev/null
++++ b/pcsd/pcsd.debian
+@@ -0,0 +1,141 @@
++#!/bin/sh
++##
++# pcsd Pacemaker & Corosync configuration daemon
++#
++# chkconfig:   - 21 81 
++# description: Pacemaker & Corosync configuration daemon
++
++### BEGIN INIT INFO
++# Provides: pcsd
++# Required-Start: $remote_fs $network $syslog
++# Required-Stop: $remote_fs $network $syslog
++# Should-Start: 
++# Should-Stop: 
++# Default-Start: 2 3 4 5
++# Default-Stop: 0 1 6
++# Short-Description: Starts and stops Pacemaker & Corosync daemon
++# Description: Starts and stops Pacemaker & Corosync daemon
++### END INIT INFO
++
++# PATH
++PATH=/usr/sbin:/usr/bin:/sbin:/bin
++DESC="pcs daemon"
++NAME=pcsd
++EXEC=ruby
++SUB_EXEC=/usr/share/pcsd/ssl.rb
++DAEMON_USER=root
++DAEMON=/usr/bin/ruby
++DAEMON_ARGS="-C/var/lib/pcsd -I/usr/share/pcsd -- /usr/share/pcsd/ssl.rb"
++PIDFILE=/var/run/$NAME.pid
++SCRIPTNAME=/etc/init.d/$NAME
++LOGFILE=/var/log/$NAME/$NAME.log
++SLEEP_DURATION=2
++
++# Exit if ruby is not installed
++[ -x $(which $EXEC) ] || echo "$EXEC was not found. Is it installed?"
++[ -x $(which $SUB_EXEC) ] || echo "$SUB_EXEC not found. Is pcs installed?"
++
++# Read configuration variable file if it is present
++[ -r /etc/default/$NAME ] && . /etc/default/$NAME
++
++# Source lsb init functions
++. /lib/lsb/init-functions
++
++is_running()
++{
++  # Test whether pid file exists or not
++  test -f $PIDFILE || return 1
++
++  # Test whether process is running or not
++  read PID < "$PIDFILE"
++  ps -p $PID >/dev/null 2>&1 || return 1
++
++  # Is running
++  return 0
++}
++
++root_only()
++{
++  if [ "$(id -u)" != "0" ]; then
++    echo "Only root should run this operation"
++    exit 1
++  fi
++}
++
++run()
++{
++  if is_running; then
++    PID="$(cat $PIDFILE)"
++    echo "Daemon is already running as PID $PID"
++    return 1
++  fi
++
++  nohup $DAEMON $DAEMON_ARGS > /dev/null 2>&1
++  echo $! > $PIDFILE
++  read PID < "$PIDFILE"
++
++  echo "PID is $PID"
++
++  sleep $SLEEP_DURATION
++  if ! is_running; then
++    echo "Daemon died immediately after starting. Please check your logs and configurations."
++    return 1
++  fi
++
++  echo "Daemon is running as PID $PID"
++  return 0
++}
++
++stop()
++{
++  if is_running; then
++    read PID < "$PIDFILE"
++    kill -9 $PID
++  fi
++
++  sleep $SLEEP_DURATION
++  if is_running; then
++    while is_running; do
++      echo "waiting for daemon to die (PID $PID)"
++      sleep $SLEEP_DURATION
++    done
++  fi
++
++  # Be sure to remove the pid file
++  rm -f "$PIDFILE"
++  return 0
++}
++
++case "$1" in
++  start)
++    root_only
++    log_daemon_msg "Starting $DESC"  "$NAME"
++    run
++    log_end_msg $?
++    ;;
++  stop)
++    root_only
++    log_daemon_msg "Stopping $DESC" "$NAME"
++    stop
++    log_end_msg $?
++    ;;
++  restart|force-reload)
++    log_daemon_msg "Restarting $DESC" "$NAME"
++    root_only
++    $0 stop && $0 start
++    ;;
++  status|monitor)
++    status_of_proc \
++      -p "$PIDFILE" \
++      "$SUB_EXEC" \
++      "$NAME" \
++      && exit 0 \
++      || exit $?
++    ;;
++  *)
++    echo "Usage: $0 {start|stop|restart|reload|force-reload|status|monitor}"
++    exit 1
++  ;;
++esac
++
++:
+diff --git a/pcsd/pcsd.pam.debian b/pcsd/pcsd.pam.debian
+new file mode 100644
+index 0000000..4757464
+--- /dev/null
++++ b/pcsd/pcsd.pam.debian
+@@ -0,0 +1,5 @@
++#%PAM-1.0
++auth       include      common-auth
++account    include      common-account
++password   include      common-password
++session    include      common-session
+diff --git a/pcsd/pcsd.service.debian b/pcsd/pcsd.service.debian
+new file mode 100644
+index 0000000..0892773
+--- /dev/null
++++ b/pcsd/pcsd.service.debian
+@@ -0,0 +1,9 @@
++[Unit]
++Description=PCS GUI and remote configuration interface
++
++[Service]
++EnvironmentFile=/etc/default/pcsd
++ExecStart=/usr/bin/ruby -C/var/lib/pcsd -I/usr/share/pcsd -- /usr/share/pcsd/ssl.rb & > /dev/null &
++
++[Install]
++WantedBy=multi-user.target

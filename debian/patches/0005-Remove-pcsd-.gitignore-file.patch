@@ -1,0 +1,22 @@
+From: Richard B Winters <rik@mmogp.com>
+Date: Wed, 6 May 2015 01:56:11 -0400
+Subject: Remove pcsd .gitignore file
+
+ - We don't install vcs ignore files in a Debian package, and 
+   do not recommend packing them in release tarballs.
+
+Change-Id: I388a75fa750f8ccb71f1b812c9fd9f5aae6e805b
+Signed-off-by: Richard B Winters <rik@mmogp.com>
+---
+ pcsd/.gitignore | 2 --
+ 1 file changed, 2 deletions(-)
+ delete mode 100644 pcsd/.gitignore
+
+diff --git a/pcsd/.gitignore b/pcsd/.gitignore
+deleted file mode 100644
+index 180bf07..0000000
+--- a/pcsd/.gitignore
++++ /dev/null
+@@ -1,2 +0,0 @@
+-.bundle
+-vendor
