@@ -5,6 +5,7 @@ etc/pam.d/*
 lib/systemd/system/*
 usr/sbin/*
 usr/share/*
+README usr/share/doc/pcs
 usr/share/pcsd/*
 usr/lib/python*/*-packages/pcs/*
 usr/lib/python*/*-packages/pcs-*.egg-info
