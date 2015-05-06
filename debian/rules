@@ -30,12 +30,9 @@ override_dh_auto_install:
 	$(MAKE) install_pcsd \
 		PREFIX=/usr \
 		DESTDIR=$(CURDIR)/debian/tmp \
-		PYTHON_SITELIB=/usr/lib/python2.7/dist-packages
-# Exclude .gitignore file
-	rm -v $(CURDIR)/debian/tmp/usr/share/pcsd/.gitignore
-# Add the readme
-	mkdir -p $(CURDIR)/debian/tmp/usr/share/doc/pcs/
-	cp $(CURDIR)/README $(CURDIR)/debian/tmp/usr/share/doc/pcs/README
+		PYTHON_SITELIB=/usr/lib/python2.7/dist-packages \
+		BUILD_GEMS=false \
+		systemddir=/lib/systemd
 
 override_dh_python2:
 	dh_python2 -p pcs --skip-private
@@ -54,5 +51,6 @@ override_dh_compress:
 	chmod -x $(CURDIR)/debian/pcs/usr/share/pcsd/public/css/*
 	chmod -x $(CURDIR)/debian/pcs/etc/pam.d/pcsd
 	chmod -x $(CURDIR)/debian/pcs/etc/bash_completion.d/pcs
+	chmod a+x $(CURDIR)/debian/pcs/usr/share/pcsd/pcsd.debian
 	chmod 755 $(CURDIR)/debian/pcs/usr/share/pcsd/public/css/images/
 	dh_compress
