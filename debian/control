@@ -23,7 +23,7 @@ Build-Depends: debhelper (>= 9.0.0),
  ruby-rack-test,
  ruby-rpam-ruby19,
  ruby-sinatra,
- ruby-sinatra-contrib
+ ruby-sinatra-contrib,
  ruby-thor,
  ruby-tilt,
  rubygems-integration
